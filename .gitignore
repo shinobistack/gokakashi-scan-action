@@ -23,3 +23,25 @@ go.work.sum
 
 # env file
 .env
+
+# Dependency directories (may appear in modules)
+/vendor/
+/Godeps/
+
+# IDE files
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# IntelliJ project files
+.idea/
+*.iml
+*.iws
+out/
+*.html
