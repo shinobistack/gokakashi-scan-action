@@ -76,6 +76,7 @@ If your GoKakashi API is protected by Cloudflare Access, you can use the followi
     cf_access_client_id: ${{ secrets.CF_ACCESS_CLIENT_ID }}
     cf_access_client_secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
 ```
+Refer [user.yaml](user.yaml)
 
 ## Security
 
