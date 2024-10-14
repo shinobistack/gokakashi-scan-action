@@ -26,6 +26,12 @@ inputs:
     description: 'Comma-separated list of severity levels to fail the job on (e.g., CRITICAL,HIGH)'
     required: false
     default: 'CRITICAL'
+  cf_access_client_id:
+    description: 'Cloudflare Access Client ID'
+    required: true
+  cf_access_client_secret:
+    description: 'Cloudflare Access Client Secret'
+    required: true
 
 outputs:
   report_url:
