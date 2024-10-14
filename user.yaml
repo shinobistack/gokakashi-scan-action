@@ -1,0 +1,42 @@
+name: Docker Image Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Scan Docker image (without Cloudflare Access)
+        uses: gokakashi/gokakashi-scan-action@v1
+        with:
+          api_host: 'https://api.gokakashi.com'
+          api_token: ${{ secrets.GOKAKASHI_API_TOKEN }}
+          image_name: 'myorg/myapp:latest'
+          severity: 'CRITICAL,HIGH'
+          fail_on_severity: 'CRITICAL'
+
+      - name: Get the scan report URL
+        run: echo "The scan report URL is ${{ steps.scan.outputs.report_url }}"
+
+      - name: Scan Docker image (with Cloudflare Access)
+        uses: gokakashi/gokakashi-scan-action@v1
+        with:
+          api_host: 'https://api.gokakashi.com'
+          api_token: ${{ secrets.GOKAKASHI_API_TOKEN }}
+          image_name: 'myorg/myapp:latest'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          publish: 'report_public'
+          fail_on_severity: 'CRITICAL'
+          cf_access_client_id: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          cf_access_client_secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+
+      - name: Get the scan report URL
+        run: echo "The scan report URL is ${{ steps.scan.outputs.report_url }}"

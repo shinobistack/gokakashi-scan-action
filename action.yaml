@@ -26,34 +26,17 @@ inputs:
     description: 'Comma-separated list of severity levels to fail the job on (e.g., CRITICAL,HIGH)'
     required: false
     default: 'CRITICAL'
+  cf_access_client_id:
+    description: 'Cloudflare Access Client ID'
+    required: true
+  cf_access_client_secret:
+    description: 'Cloudflare Access Client Secret'
+    required: true
 
 outputs:
   report_url:
     description: 'URL of the scan report'
 
 runs:
-  using: 'composite'
-  steps:
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-        cache-dependency-path: .github/actions/gokakashi-scan
-
-    - name: Install dependencies
-      run: npm ci
-      working-directory: .github/actions/gokakashi-scan
-      shell: bash
-
-    - name: Run goKakashi scan
-      run: node index.js
-      shell: bash
-      working-directory: .github/actions/gokakashi-scan
-      env:
-        INPUT_API_HOST: ${{ inputs.api_host }}
-        INPUT_API_TOKEN: ${{ inputs.api_token }}
-        INPUT_IMAGE_NAME: ${{ inputs.image_name }}
-        INPUT_SEVERITY: ${{ inputs.severity }}
-        INPUT_PUBLISH: ${{ inputs.publish }}
-        INPUT_FAIL_ON_SEVERITY: ${{ inputs.fail_on_severity }}
+  using: 'node20'
+  main: 'index.js'
