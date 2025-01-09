@@ -3,6 +3,10 @@ name: gokakashi Action
 on:
   workflow_dispatch:
     inputs:
+      gokakashi_version:
+        description: 'gokakashi version'
+        required: false
+        default: 'v0.1.0'
       image:
         description: 'Container image to scan'
         required: true
@@ -12,10 +16,14 @@ on:
       server:
         description: 'Server'
         required: true
-      gokakashi_version:
-        description: 'gokakashi version'
+      interval:
+        description: 'Interval in seconds to check the scan status (default: 10).'
         required: false
-        default: 'v0.1.0'
+        default: 10
+      retries:
+        description: 'Number of retries before failing the build (default: 10).'
+        required: false
+        default: 10
 
 jobs:
   scan:
