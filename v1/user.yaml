@@ -1,0 +1,31 @@
+name: gokakashi Action
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Container image to scan'
+        required: true
+      policy:
+        description: 'Policy for the scan'
+        required: true
+      server:
+        description: 'Server'
+        required: true
+      gokakashi_version:
+        description: 'gokakashi version'
+        required: false
+        default: 'v0.1.0'
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run goKakashi Scan Action
+        uses: shinobistack/gokakashi-scan-action@v0.1.0
+        with:
+          image: ${{ github.event.inputs.image }}
+          policy: ${{ github.event.inputs.policy }}
+          server: ${{ github.event.inputs.server }}
+          token: ${{ secrets.GOKAKASHI_API_TOKEN }}
