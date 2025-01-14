@@ -18,6 +18,12 @@ inputs:
   token:
     description: 'Authentication token for the server.'
     required: true
+  cf_client_id:
+    description: 'Cloudflare Access Client ID (optional).'
+    required: false
+  cf_client_secret:
+    description: 'Cloudflare Access Client Secret (optional).'
+    required: false
   scan_id:
     description: 'The scan ID to check the status of a previously triggered scan.'
     required: false
@@ -36,7 +42,7 @@ inputs:
 
 outputs:
   report_url:
-    description: 'cURL of the scanID.'
+    description: 'URL of the scanID.'
 
 runs:
   using: 'node16'

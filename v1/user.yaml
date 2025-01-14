@@ -4,18 +4,27 @@ on:
   workflow_dispatch:
     inputs:
       gokakashi_version:
-        description: 'gokakashi version'
+        description: 'The version of goKakashi to use (default: v0.1.0).'
         required: false
         default: 'v0.1.0'
       image:
-        description: 'Container image to scan'
+        description: 'The container image to scan.'
         required: true
       policy:
-        description: 'Policy for the scan'
+        description: 'The policy to use for the scan.'
         required: true
       server:
-        description: 'Server'
+        description: 'The server URL where goKakashi API is hosted.'
         required: true
+      token:
+        description: 'Authentication token for the server.'
+        required: true
+      cf_client_id:
+        description: 'Cloudflare Access Client ID (optional).'
+        required: false
+      cf_client_secret:
+        description: 'Cloudflare Access Client Secret (optional).'
+        required: false
       interval:
         description: 'Interval in seconds to check the scan status (default: 10).'
         required: false
@@ -30,6 +39,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Run goKakashi Scan Action
         uses: shinobistack/gokakashi-scan-action@v0.1.0
         with:
@@ -37,3 +49,8 @@ jobs:
           policy: ${{ github.event.inputs.policy }}
           server: ${{ github.event.inputs.server }}
           token: ${{ secrets.GOKAKASHI_API_TOKEN }}
+          cf_client_id: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          cf_client_secret: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+          interval: ${{ github.event.inputs.interval }}
+          retries: ${{ github.event.inputs.retries }}
+          gokakashi_version: ${{ github.event.inputs.gokakashi_version }}
