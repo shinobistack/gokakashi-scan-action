@@ -1,5 +1,15 @@
-import * as core from '@actions/core';
-import * as exec from '@actions/exec';
+const core = require('@actions/core');
+const exec = require('@actions/exec');
+
+const interval = parseInt(core.getInput('interval') || '10', 10);
+const retries = parseInt(core.getInput('retries') || '10', 10);
+
+if (!Number.isInteger(interval) || interval <= 0) {
+    throw new Error('Invalid interval. It must be a positive integer.');
+}
+if (!Number.isInteger(retries) || retries <= 0) {
+    throw new Error('Invalid retries. It must be a positive integer.');
+}
 
 
 
@@ -116,6 +126,7 @@ import * as exec from '@actions/exec';
         }
 
         if (status !== 'success') {
+            core.error(`Scan failed to complete successfully. Last known status: ${status}`);
             throw new Error('Scan did not complete successfully within the retry limit.');
         }
 
