@@ -8,6 +8,8 @@ const exec = require('@actions/exec');
         const policy = core.getInput('policy');
         const server = core.getInput('server');
         const token = core.getInput('token');
+        const cfClientID = core.getInput('cf_client_id');
+        const cfClientSecret = core.getInput('cf_client_secret');
         const scanIdInput = core.getInput('scan_id');
         const interval = parseInt(core.getInput('interval') || '10');
         const retries = parseInt(core.getInput('retries') || '10');
@@ -15,17 +17,23 @@ const exec = require('@actions/exec');
 
         let scanId = scanIdInput;
 
-        // Step 1: Pull the goKakashi version
-        core.info(`Pulling goKakashi version: ${gokakashiVersion}`);
+        // Environment variables for headers
+        const envVars = {
+            CF_ACCESS_CLIENT_ID: cfClientID || '',
+            CF_ACCESS_CLIENT_SECRET: cfClientSecret || ''
+        };
+
+        //Pull the gokakashi version
+        core.info(`Pulling gokakashi version: ${gokakashiVersion}`);
         await exec.exec(`docker pull ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`);
 
-        // Step 2: Trigger a new scan if image and policy are provided
+        // Trigger a new scan if image and policy are provided
         if (image && policy) {
             core.info(`Triggering scan for image: ${image} with policy: ${policy}`);
             const output = [];
 
             await exec.exec(
-                `docker run --rm ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
+                `docker run --rm --env CF_ACCESS_CLIENT_ID=${cfClientID} --env CF_ACCESS_CLIENT_SECRET=${cfClientSecret} ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
                 [
                     'scan',
                     'image',
@@ -61,14 +69,14 @@ const exec = require('@actions/exec');
         const scanUrl = `${server}/api/v1/scans/${scanId}`;
         core.info(`Scan details can be fetched at: ${scanUrl}`);
 
-        // Step 3: Check scan status
+        //Check scan status
         let status = '';
         for (let attempt = 1; attempt <= retries; attempt++) {
             core.info(`Checking scan status (Attempt ${attempt}/${retries})...`);
             const output = [];
 
             await exec.exec(
-                `docker run --rm ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
+                `docker run --rm --env CF_ACCESS_CLIENT_ID=${cfClientID} --env CF_ACCESS_CLIENT_SECRET=${cfClientSecret} ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
                 [
                     'scan',
                     'status',
@@ -110,7 +118,7 @@ const exec = require('@actions/exec');
         }
 
         // Output the scan URL
-        core.setOutput('cURL', scanUrl);
+        core.setOutput('report_url', scanUrl);
     } catch (error) {
         core.setFailed(error.message);
     }
