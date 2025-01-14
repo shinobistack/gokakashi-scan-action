@@ -34,7 +34,7 @@ The goKakashi GitHub Action allows you to integrate container image vulnerabilit
 
 ## Usage
 
-Here's a basic example of how to use this action in your workflow:
+Here's a basic example of how to use this action in your workflow: user.yaml
 
 
 ## Security
