@@ -1,5 +1,6 @@
-const core = require('@actions/core');
-const exec = require('@actions/exec');
+import * as core from '@actions/core';
+import * as exec from '@actions/exec';
+
 
 const interval = parseInt(core.getInput('interval') || '10', 10);
 const retries = parseInt(core.getInput('retries') || '10', 10);
