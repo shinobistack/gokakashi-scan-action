@@ -27415,6 +27415,7 @@ var __webpack_exports__ = {};
 
 
 
+
 (async () => {
     try {
         // Inputs
@@ -27439,14 +27440,14 @@ var __webpack_exports__ = {};
 
         // Pull the gokakashi version
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Pulling gokakashi version: ${gokakashiVersion}`);
-        await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec.exec(`docker pull ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`);
+        await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(`docker pull ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`);
 
         // Trigger a new scan if image and policy are provided
         if (image && policy) {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Triggering scan for image: ${image} with policy: ${policy}`);
             const output = [];
 
-            await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec.exec(
+            await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(
                 `docker run --rm --env CF_ACCESS_CLIENT_ID=${cfClientID} --env CF_ACCESS_CLIENT_SECRET=${cfClientSecret} ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
                 [
                     'scan',
@@ -27489,7 +27490,7 @@ var __webpack_exports__ = {};
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Checking scan status (Attempt ${attempt}/${retries})...`);
             const output = [];
 
-            await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec.exec(
+            await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(
                 `docker run --rm --env CF_ACCESS_CLIENT_ID=${cfClientID} --env CF_ACCESS_CLIENT_SECRET=${cfClientSecret} ghcr.io/shinobistack/gokakashi:${gokakashiVersion}`,
                 [
                     'scan',
